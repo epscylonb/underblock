@@ -1,0 +1,16 @@
+%div
+  %table.table-striped.table
+    %tbody
+      %tr
+        %th DateTime
+        %th Height
+        %th Block Hash
+        %th Size
+      - @blocks.each do |b|
+        %tr
+          %td= b['datetime']
+          %td
+            %a(href="/blocks/#{b['height']}")
+              = b['height']
+          %td= b['hash']
+          %td= as_size(b['size'])

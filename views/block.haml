@@ -1,0 +1,32 @@
+
+%div
+  - @txes.each do |tx|
+    %div.row
+      %h3 Transaction
+      %p= tx['txid'] 
+    %div.row
+      %h4 Input TXIDs
+      - tx['vin'].each do |vin|
+        %ul= vin['txid'] || "No inputs (Newly generated coins)"
+    %div.row
+      %h4 
+        Outputs
+        %table.table.table-striped
+          %tbody
+            %tr
+              %th Index
+              %th Addresses
+              %th Value
+            - tx['vout'].each do |vout|
+              %tr
+                %td= vout['n']
+                %td= vout['scriptPubKey']['addresses'].join ', '
+                %td= vout['value']
+            %tr
+              %td
+              %td
+              %td= tx['vout'].map {|v| v['value'] }.inject {|sum,v| sum += v.to_f}.round(8)
+
+  %p= "Page #{params[:page] || 1}"
+  %a(href="/blocks/#{@block['height']}?page=#{(params[:page].to_i || 1) + 1}")
+    Next
