@@ -2,6 +2,7 @@ require 'rubygems'
 require 'bitcoin'
 require 'sinatra'
 require 'haml'
+require 'sinatra/partial'
 
 set :bind, '0.0.0.0'
 
@@ -35,15 +36,14 @@ def page_range(page)
 end 
 
 def from_unixtime(unixtime)
-  Time.at(unixtime).to_datetime
+  Time.at(unixtime).to_datetime.rfc2822
 end
 
 def get_blocks(n = 5)
   blocks = []
   bc = client.request 'getblockcount'
-  p bc
   s = bc - 5
-  (s...bc).each do |bn|7
+  (s..bc).each do |bn|
     p bn
     hs = client.request 'getblockhash', bn
     block = client.request 'getblock', hs
@@ -53,9 +53,15 @@ def get_blocks(n = 5)
   blocks.reverse
 end
 
+def get_block_by_hash(block_hash)
+  block = client.request 'getblock', block_hash
+  block['datetime'] = from_unixtime(block['time'])
+  block
+end
+
 def get_block(height)
   hs = client.request 'getblockhash', height
-  client.request 'getblock', hs
+  get_block_by_hash(hs)
 end
 
 def get_txes(block, page)
@@ -63,13 +69,17 @@ def get_txes(block, page)
 
   txes = []
   block['tx'][start..finish].each do |tx|
-    p tx
-    t = client.request 'getrawtransaction', tx, 1 
-    t['datetime'] = from_unixtime(t['time'])
-    txes << t
+    txes << get_tx(tx)
   end
   txes
 end
+
+def get_tx(txid)
+  t = client.request 'getrawtransaction', txid, 1
+  t['datetime'] = from_unixtime(t['time'])
+  t
+end
+
 
 
 get '/' do
@@ -79,9 +89,17 @@ end
 
 get '/blocks/:height' do
   p params[:page]
-  page = params[:page] || 1
+  @page = params[:page] || 1
   @block = get_block(params[:height].to_i)
-  @txes = get_txes(@block, page.to_i)
+  @txes = get_txes(@block, @page.to_i)
+  @max_pages = (@block['tx'].size / 20).to_i + 1
+  p @max_pages
   haml :block
 end
   
+get '/transaction/:txid' do
+  @tx = get_tx(params[:txid])
+  @block = get_block_by_hash(@tx['blockhash']) 
+  haml :transaction
+end
+

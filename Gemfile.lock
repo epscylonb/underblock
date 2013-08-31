@@ -17,6 +17,8 @@ GEM
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (~> 1.3, >= 1.3.4)
+    sinatra-partial (0.4.0)
+      sinatra
     thin (1.5.1)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
@@ -30,4 +32,5 @@ DEPENDENCIES
   bitcoin-client
   haml
   sinatra
+  sinatra-partial
   thin
