@@ -1,17 +1,20 @@
-%h2 Block
-%table.table
-  %tbody
-    %tr
-      %th Height
-      %th Transactions
-      %th DateTime
-      %th Size
-    %tr
-      %td
-        =@block['height']
-      %td
-        =@block['tx'].size
-      %td
-        =@block['datetime']
-      %td
-        =as_size(@block['size'])
+%div.panel.panel-default
+  %div.panel-heading
+    %h2 Block
+  %div.panel-body
+    %table.table
+      %tbody
+        %tr
+          %th Height
+          %th Transactions
+          %th DateTime
+          %th Size
+        %tr
+          %td
+            =@block['height']
+          %td
+            =@block['tx'].size
+          %td
+            =@block['datetime']
+          %td
+            =as_size(@block['size'])

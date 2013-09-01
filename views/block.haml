@@ -1,7 +1,7 @@
 %div
   = partial :block_header, locals: {:block => @block}
 
-  %ul.pagination
+  %ul.pagination.pagination-sm
     - (1..@max_pages).each do |page|
       %li{:class => ('active' if page.to_i == @page.to_i)}
         %a(href="/blocks/#{@block['height']}?page=#{(page).to_s}")
@@ -11,3 +11,11 @@
   - @txes.each do |tx|
     - @tx = tx
     = partial :transaction, locals: {:block => @block, :tx => @tx}
+
+  %ul.pager
+    %li{:class => ('disabled' if @page.to_i == 1)}
+      %a(href="/blocks/#{@block['height']}?page=#{(@page.to_i - 1).to_s}")
+        Previous
+    %li{:class => ('disabled' if @page.to_i == @max_pages)} 
+      %a(href="/blocks/#{@block['height']}?page=#{(@page.to_i + 1).to_s}")
+        Next

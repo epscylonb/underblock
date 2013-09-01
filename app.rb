@@ -63,7 +63,6 @@ def get_block(height)
   hs = client.request 'getblockhash', height
   get_block_by_hash(hs)
 end
-
 def get_txes(block, page)
   start,finish = page_range(page)
 
@@ -80,8 +79,6 @@ def get_tx(txid)
   t
 end
 
-
-
 get '/' do
   @blocks = get_blocks
   haml :index
@@ -89,7 +86,7 @@ end
 
 get '/blocks/:height' do
   p params[:page]
-  @page = params[:page] || 1
+  @page = (params[:page] || 1).to_i
   @block = get_block(params[:height].to_i)
   @txes = get_txes(@block, @page.to_i)
   @max_pages = (@block['tx'].size / 20).to_i + 1
