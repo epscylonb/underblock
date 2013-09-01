@@ -13,9 +13,11 @@
     = partial :transaction, locals: {:block => @block, :tx => @tx}
 
   %ul.pager
-    %li{:class => ('disabled' if @page.to_i == 1)}
-      %a(href="/blocks/#{@block['height']}?page=#{(@page.to_i - 1).to_s}")
-        Previous
-    %li{:class => ('disabled' if @page.to_i == @max_pages)} 
-      %a(href="/blocks/#{@block['height']}?page=#{(@page.to_i + 1).to_s}")
-        Next
+    -if @page.to_i != 1
+      %li.previous
+        %a(href="/blocks/#{@block['height']}?page=#{(@page.to_i - 1).to_s}")
+          Previous
+    -if @page.to_i != @max_pages
+      %li.next 
+        %a(href="/blocks/#{@block['height']}?page=#{(@page.to_i + 1).to_s}")
+          Next

@@ -12,9 +12,12 @@
       %dd= @tx['vin'].size
       %dt Outputs
       %dd= @tx['vout'].size
+      %dt Confirmations
+      %dd= @tx['confirmations']
       %dt Total Output Value
       %dd 
         = "%.8f" % @tx['vout'].map {|v| v['value'] }.inject {|sum,v| sum += v.to_f}
+
   %div.panel-body
     %div#input
       %h4 Input TXIDs
@@ -38,7 +41,10 @@
           - @tx['vout'].each do |vout|
             %tr
               %td= vout['n']
-              %td= vout['scriptPubKey']['addresses'].join ', '
+              %td
+                %ul.list-inline
+                  - vout['scriptPubKey']['addresses'].each do |addr|
+                    %li= addr
               %td= "%.8f" % vout['value']
 
   %div.panel-footer
