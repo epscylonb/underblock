@@ -1,0 +1,34 @@
+-if request.path.include?('transaction')
+  = partial :block_header, locals: {:block => @block}
+
+%div.panel.panel-default
+  %div.panel-heading
+    %h3= "Transaction"
+    %p= "#{@tx['txid']}"
+  %div.panel-body
+    %h4 Input TXIDs
+    - if @tx['vin'].any?
+      - @tx['vin'].each do |vin|
+        %ul.list-group
+          %li.list-group-item
+            %a(href="/transaction/#{vin['txid']}")
+              = vin['txid']
+  %div.panel-body
+    %h4 
+      Outputs
+    %table.table.table-striped
+      %tbody
+        %tr
+          %th Index
+          %th Address
+          %th Value
+        - @tx['vout'].each do |vout|
+          %tr
+            %td= vout['n']
+            %td= vout['scriptPubKey']['addresses'].join ', '
+            %td= "%f" % vout['value']
+        %tr
+          %td
+          %td
+          %td!
+            = "%f" % @tx['vout'].map {|v| v['value'] }.inject {|sum,v| sum += v.to_f}

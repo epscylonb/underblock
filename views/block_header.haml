@@ -1,0 +1,17 @@
+%h2 Block
+%table.table
+  %tbody
+    %tr
+      %th Height
+      %th Transactions
+      %th DateTime
+      %th Size
+    %tr
+      %td
+        =@block['height']
+      %td
+        =@block['tx'].size
+      %td
+        =@block['datetime']
+      %td
+        =as_size(@block['size'])
