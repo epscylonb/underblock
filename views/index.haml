@@ -23,6 +23,14 @@
     %div.form-group
       %label.control-label.col-lg-2 TXID 
       %div.col-lg-10
-        %input.form-control{:type => 'text'}
-      %button.btn.btn-default{:type => 'submit'}
-        Submit
+        %input.form-control{:type => 'search', :name => 'txid'}
+
+    %div.form-group
+      %label.control-label.col-lg-2 Block Hash 
+      %div.col-lg-10
+        %input.form-control{:type => 'search', :name => 'blockhash'}
+
+    %div.form-group
+      %div.col-lg-offset-2.col-lg-10
+        %button.btn.btn-default{:type => 'submit'}
+          Search

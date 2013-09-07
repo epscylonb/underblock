@@ -9,10 +9,10 @@
 %form{:action => '/configure', :method => 'post'}
   %div.form-group
     %label Host
-    %input.form-control{:type => 'text', :name => 'host'}
+    %input.form-control{:type => 'text', :name => 'host', :value => 'localhost'}
   %div.form-group
     %label Port
-    %input.form-control{:type => 'text', :name => 'port'}
+    %input.form-control{:type => 'number', :name => 'port', :value => '8332'}
   %div.form-group
     %label RPC Username
     %input.form-control{:type => 'text', :name => 'user'}
