@@ -1,19 +1,32 @@
 require 'rubygems'
+require 'yaml'
 require 'bitcoin'
 require 'sinatra'
 require 'haml'
 require 'sinatra/partial'
 
+CONFIG_FILE = './config.yml'
+
 set :bind, '0.0.0.0'
 
+def get_config
+  conf = YAML.load_file(CONFIG_FILE)
+  conf2 = conf[:bitcoin]
+  conf2 = conf2.inject({}){|memo,(k,v)| memo[k.to_sym] = v; memo}
+  conf2
+end
+
 def client
-  options = { 
-    #   :ssl => false,
-    :host => 'localhost',
-    :port => '8332',
-    :user => 'bitcoinrpc', 
-    :pass => '61Min6KjXruL9t6qQbHadLY3srftn8qjEQ39veqTfMuf' 
-  }
+  #  options = { 
+  #    #   :ssl => false,
+  #    :host => 'localhost',
+  #    :port => '8332',
+  #    :user => 'bitcoinrpc', 
+  #    :pass => '61Min6KjXruL9t6qQbHadLY3srftn8qjEQ39veqTfMuf' 
+  #  }
+  options = get_config
+  p options
+  p options[:host]
   Bitcoin::API.new(options)
 end
 
@@ -63,6 +76,7 @@ def get_block(height)
   hs = client.request 'getblockhash', height
   get_block_by_hash(hs)
 end
+
 def get_txes(block, page)
   start,finish = page_range(page)
 
@@ -79,6 +93,21 @@ def get_tx(txid)
   t
 end
 
+def can_get_blockcount?
+  begin
+    bc = client.request 'getblockcount'
+  rescue
+    return false
+  end
+  true
+end
+
+before do
+  unless request.path == '/configure'
+    redirect '/configure' unless File.exists?(CONFIG_FILE)
+  end
+end
+
 get '/' do
   @blocks = get_blocks
   haml :index
@@ -87,16 +116,29 @@ end
 get '/blocks/:height' do
   p params[:page]
   @page = (params[:page] || 1).to_i
-  @block = get_block(params[:height].to_i)
+  @block = get_block(params[:height].to_i) 
   @txes = get_txes(@block, @page.to_i)
   @max_pages = (@block['tx'].size / 20).to_i + 1
   p @max_pages
   haml :block
 end
-  
+
 get '/transaction/:txid' do
   @tx = get_tx(params[:txid])
   @block = get_block_by_hash(@tx['blockhash']) 
   haml :transaction
 end
 
+get '/configure' do 
+  haml :configure
+end
+
+post '/configure' do 
+  @errors = []
+  File.write(CONFIG_FILE, {:bitcoin => params}.to_yaml)
+  if !can_get_blockcount?
+    @errors << "Could not fetch the blockcount with the given details"
+    return haml :configure
+  end
+  redirect '/'
+end

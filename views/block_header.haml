@@ -1,6 +1,28 @@
 %div.panel.panel-default
   %div.panel-heading
-    %h2 Block
+    %dl.dl-horizontal
+      %dt Block Hash
+      %dd
+        = @block['hash']
+      %dt Nonce
+      %dd= @block['nonce']
+      %dt Difficulty
+      %dd= @block['difficulty']
+      %dt Version
+      %dd= @block['version']
+      %dt Merkle Root
+      %dd= @block['merkleroot']
+      - if params[:height]
+        %dt Previous Block
+        %dd
+          %a(href="/blocks/#{params[:height].to_i - 1}")
+            = @block['previousblockhash']
+        - if @block['nextblockhash']
+          %dt Next Block
+          %dd
+            %a(href="/blocks/#{params[:height].to_i + 1}")
+              = @block['nextblockhash']
+
   %div.panel-body
     %table.table
       %tbody

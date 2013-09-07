@@ -15,3 +15,14 @@
               = b['height']
           %td= b['hash']
           %td= as_size(b['size'])
+          
+%div
+  %h2 Search
+  
+  %form.form-horizontal
+    %div.form-group
+      %label.control-label.col-lg-2 TXID 
+      %div.col-lg-10
+        %input.form-control{:type => 'text'}
+      %button.btn.btn-default{:type => 'submit'}
+        Submit
