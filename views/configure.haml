@@ -1,0 +1,23 @@
+%h2 Configure
+
+- if @errors and @errors.any?
+  %div
+    -@errors.each do |error|
+      %div.alert.alert-danger
+        = error
+
+%form{:action => '/configure', :method => 'post'}
+  %div.form-group
+    %label Host
+    %input.form-control{:type => 'text', :name => 'host'}
+  %div.form-group
+    %label Port
+    %input.form-control{:type => 'text', :name => 'port'}
+  %div.form-group
+    %label RPC Username
+    %input.form-control{:type => 'text', :name => 'user'}
+  %div.form-group
+    %label RPC Password
+    %input.form-control{:type => 'password', :name => 'pass'}
+  %button.btn.btn-default{:type => 'submit'}
+    Submit
