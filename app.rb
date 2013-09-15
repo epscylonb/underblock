@@ -49,7 +49,7 @@ def page_range(page)
 end 
 
 def from_unixtime(unixtime)
-  Time.at(unixtime).to_datetime.rfc2822
+  Time.at(unixtime)
 end
 
 def get_blocks(n = 5)
@@ -87,9 +87,23 @@ def get_txes(block, page)
   txes
 end
 
+def get_mempool
+  client.request 'getrawmempool'
+end
+
+def get_mempool_txes(mempool, page)
+  start,finish = page_range(page)
+
+  txes = []
+  mempool[start..finish].each do |tx|
+    txes << get_tx(tx)
+  end
+  txes
+end
+
 def get_tx(txid)
   t = client.request 'getrawtransaction', txid, 1
-  t['datetime'] = from_unixtime(t['time'])
+  t['datetime'] = from_unixtime(t['time']) if t['time']
   t
 end
 
@@ -129,6 +143,20 @@ get '/transaction/:txid' do
   haml :transaction
 end
 
+get '/peers' do 
+  @peers = client.request 'getpeerinfo'
+  haml :peers
+end
+
+get '/mempool' do
+  p params[:page]
+  @page = (params[:page] || 1).to_i
+  @mempool = client.request 'getrawmempool'
+  @txes = get_mempool_txes(@mempool,@page)
+  @max_pages = (@mempool.size / 20).to_i + 1
+  haml :mempool
+end
+
 get '/configure' do 
   haml :configure
 end
@@ -141,4 +169,10 @@ post '/configure' do
     return haml :configure
   end
   redirect '/'
+end
+
+post '/search' do
+ redirect "/transaction/#{params[:txid]}" if params[:txid]
+ redirect "/blocks/#{params[:blockheight]}" if params[:blockheight]
+
 end

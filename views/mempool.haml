@@ -1,0 +1,21 @@
+%div
+  %ul.pagination.pagination-sm
+    - (1..@max_pages).each do |page|
+      %li{:class => ('active' if page.to_i == @page.to_i)}
+        %a(href="/mempool?page=#{(page).to_s}")
+          =page
+
+
+  - @txes.each do |tx|
+    - @tx = tx
+    = partial :transaction, locals: {:block => nil, :tx => @tx}
+
+  %ul.pager
+    -if @page.to_i != 1
+      %li.previous
+        %a(href="/blocks?page=#{(@page.to_i - 1).to_s}")
+          Previous
+    -if @page.to_i != @max_pages
+      %li.next 
+        %a(href="/blocks?page=#{(@page.to_i + 1).to_s}")
+          Next

@@ -1,0 +1,23 @@
+%div
+  %table.table-striped.table
+    %tbody
+      %tr
+        %th Address
+        %th Last Send
+        %th Last Receive
+        %th Sent
+        %th Received
+        %th Connected
+        %th Version
+        %th Sub Version
+      - @peers.each do |peer|
+        %tr
+          %td= peer['addr']
+          %td= from_unixtime(peer['lastsend'])
+          %td= from_unixtime(peer['lastrecv'])
+          %td= as_size(peer['bytessent'])
+          %td= as_size(peer['bytesrecv'])
+          %td= from_unixtime(peer['conntime'])
+          %td= peer['version']
+          %td= peer['subver']
+

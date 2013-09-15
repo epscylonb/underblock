@@ -5,4 +5,17 @@
     %div.container
       %a(href='/')
         %h1 UnderBlock 
+
+      %ul.nav.nav-pills
+        %li{:class => ('active' if request.path_info == '/')}
+          %a(href='/')
+            Blockchain
+        %li{:class => ('active' if request.path_info == '/peers')}
+          %a(href='/peers')
+            Peers
+        %li{:class => ('active' if request.path_info == '/mempool')}
+          %a(href='/mempool')
+            Mempool
+
+      %br
       = yield

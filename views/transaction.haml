@@ -13,7 +13,7 @@
       %dt Outputs
       %dd= @tx['vout'].size
       %dt Confirmations
-      %dd= @tx['confirmations']
+      %dd= @tx['confirmations'] || 0
       %dt Total Output Value
       %dd 
         = "%.8f" % @tx['vout'].map {|v| v['value'] }.inject {|sum,v| sum += v.to_f}
