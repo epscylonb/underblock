@@ -19,7 +19,7 @@
 %div
   %h2 Search
   
-  %form.form-horizontal
+  %form.form-horizontal{:action => '/search', :method => 'post'}
     %div.form-group
       %label.control-label.col-lg-2 Transaction ID 
       %div.col-lg-10

@@ -133,6 +133,11 @@ get '/blocks/:height' do
   haml :block
 end
 
+get '/blockhash/:hash' do
+  @block = get_block_by_hash(params[:hash])
+  redirect "/blocks/#{@block['height']}"
+end
+
 get '/transaction/:txid' do
   @tx = get_tx(params[:txid])
   @block = get_block_by_hash(@tx['blockhash']) 
@@ -168,7 +173,9 @@ post '/configure' do
 end
 
 post '/search' do
- redirect "/transaction/#{params[:txid]}" if params[:txid]
- redirect "/blocks/#{params[:blockheight]}" if params[:blockheight]
+ redirect "/transaction/#{params[:txid]}" if params[:txid] != ''
+ redirect "/blocks/#{params[:blockheight]}" if params[:blockheight] != ''
+ redirect "/blockhash/#{params[:blockhash]}" if params[:blockhash] != ''
 
+ haml :index
 end
