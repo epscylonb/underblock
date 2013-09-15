@@ -4,7 +4,7 @@ Underblock
 Underblock is a simple blockchain explorer for bitcoin, inspired by the python equivalent [Overblock](https://github.com/realazthat/overblock).
 
 Features
-* Search by transaction id or block hash.
+* Search by transaction id or block height.
 * Display mempool (unconfirmed) transactions.
 * Display peerinfo.
 
