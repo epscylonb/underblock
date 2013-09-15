@@ -17,13 +17,6 @@ def get_config
 end
 
 def client
-  #  options = { 
-  #    #   :ssl => false,
-  #    :host => 'localhost',
-  #    :port => '8332',
-  #    :user => 'bitcoinrpc', 
-  #    :pass => '61Min6KjXruL9t6qQbHadLY3srftn8qjEQ39veqTfMuf' 
-  #  }
   options = get_config
   p options
   p options[:host]
