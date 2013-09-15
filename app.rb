@@ -87,10 +87,6 @@ def get_txes(block, page)
   txes
 end
 
-def get_mempool
-  client.request 'getrawmempool'
-end
-
 def get_mempool_txes(mempool, page)
   start,finish = page_range(page)
 
