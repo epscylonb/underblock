@@ -16,6 +16,7 @@ Requirements
 To run it...
 
   `bundle intall`
+
   `ruby app.rb`
 
 You need a bitcoind node for Underblock to retrieve blockchain data from, if the config doesn't exist Underblock will ask you for the info.
