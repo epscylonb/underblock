@@ -18,8 +18,6 @@ end
 
 def client
   options = get_config
-  p options
-  p options[:host]
   Bitcoin::API.new(options)
 end
 
@@ -50,7 +48,6 @@ def get_blocks(n = 5)
   bc = client.request 'getblockcount'
   s = bc - 5
   (s..bc).each do |bn|
-    p bn
     hs = client.request 'getblockhash', bn
     block = client.request 'getblock', hs
     block['datetime'] = from_unixtime(block['time'])
@@ -117,12 +114,10 @@ get '/' do
 end
 
 get '/blocks/:height' do
-  p params[:page]
   @page = (params[:page] || 1).to_i
   @block = get_block(params[:height].to_i) 
   @txes = get_txes(@block, @page.to_i)
   @max_pages = (@block['tx'].size / 20).to_i + 1
-  p @max_pages
   haml :block
 end
 
