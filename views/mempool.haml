@@ -13,9 +13,9 @@
   %ul.pager
     -if @page.to_i != 1
       %li.previous
-        %a(href="/blocks?page=#{(@page.to_i - 1).to_s}")
+        %a(href="/mempool?page=#{(@page.to_i - 1).to_s}")
           Previous
     -if @page.to_i != @max_pages
       %li.next 
-        %a(href="/blocks?page=#{(@page.to_i + 1).to_s}")
+        %a(href="/mempool?page=#{(@page.to_i + 1).to_s}")
           Next
